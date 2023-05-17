@@ -13,13 +13,23 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { getSingleEndpoint} from "@/assets/api_connector";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+  },
+  data(){
+      return {
+          buildings: [],
+      }
+  },
+  mounted(){
+      getSingleEndpoint({}, 'Buildings').then((response) => {
+          this.buildings = response.data;
+          //this.drawBuildings();
+      });
+  },
 }
 </script>
 
