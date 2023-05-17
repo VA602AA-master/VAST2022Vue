@@ -3,7 +3,7 @@
     <b-row>
       <b-col>
         <div id="map">
-            <svg width="100%" height="600px">
+            <svg width="100%" height="700px" ref="map">
                 <g class="buildings"></g>
             </svg>
         </div>
@@ -16,6 +16,11 @@
 import { getSingleEndpoint} from "@/assets/api_connector";
 let Buffer = require('buffer/').Buffer;
 const wkx = require('wkx');
+const d3 = require('d3');
+
+import {BuildingMap} from "@/assets/BuildingMap";
+
+const bm = new BuildingMap();
 
 export default {
   name: 'App',
@@ -29,13 +34,25 @@ export default {
   mounted(){
       getSingleEndpoint({}, 'Buildings').then((response) => {
           this.buildings = response.data.map(d => ({
-              ...d,
-              location: wkx.Geometry.parse(Buffer.from(d.location, 'hex')).toGeoJSON(),
+              type: "Feature",
+              geometry: wkx.Geometry.parse(Buffer.from(d.location, 'hex')).toGeoJSON(),
+              properties:{
+                  buildingId: d.buildingId,
+                  buildingType: d.buildingType,
+                  maxOccupancy: d.maxOccupancy,
+                  units: d.units,
+              },
           }));
-          //this.drawBuildings();
-
+          this.drawBuildings();
       });
   },
+  methods:{
+      drawBuildings(){
+        d3.select(this.$refs.map).select('g.buildings')
+            .datum(this.buildings)
+            .call(bm);
+      }
+  }
 }
 </script>
 
@@ -46,5 +63,11 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+svg g.buildings path{
+    fill-opacity: 0.2;
+    fill: lightgrey;
+    stroke: grey;
 }
 </style>
