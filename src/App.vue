@@ -5,6 +5,7 @@
         <div id="map">
             <svg width="100%" height="700px" ref="map">
                 <g class="buildings"></g>
+                <g class="legend"></g>
             </svg>
         </div>
       </b-col>
@@ -18,9 +19,10 @@ let Buffer = require('buffer/').Buffer;
 const wkx = require('wkx');
 const d3 = require('d3');
 
-import {BuildingMap} from "@/assets/BuildingMap";
+import {BuildingMap, BuildingTypeLegend} from "@/assets/BuildingMap";
 
 const bm = new BuildingMap();
+const bl = new BuildingTypeLegend();
 
 export default {
   name: 'App',
@@ -51,6 +53,11 @@ export default {
         d3.select(this.$refs.map).select('g.buildings')
             .datum(this.buildings)
             .call(bm);
+
+        bl.color(bm.color());
+
+        d3.select(this.$refs.map).select('g.legend')
+            .call(bl);
       }
   }
 }
@@ -67,7 +74,6 @@ export default {
 
 svg g.buildings path{
     fill-opacity: 0.2;
-    fill: lightgrey;
     stroke: grey;
 }
 </style>
