@@ -14,6 +14,8 @@
 
 <script>
 import { getSingleEndpoint} from "@/assets/api_connector";
+let Buffer = require('buffer/').Buffer;
+const wkx = require('wkx');
 
 export default {
   name: 'App',
@@ -26,8 +28,12 @@ export default {
   },
   mounted(){
       getSingleEndpoint({}, 'Buildings').then((response) => {
-          this.buildings = response.data;
+          this.buildings = response.data.map(d => ({
+              ...d,
+              location: wkx.Geometry.parse(Buffer.from(d.location, 'hex')).toGeoJSON(),
+          }));
           //this.drawBuildings();
+
       });
   },
 }
@@ -38,7 +44,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   margin-top: 60px;
 }
