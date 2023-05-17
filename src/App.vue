@@ -1,8 +1,15 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <b-container id="app">
+    <b-row>
+      <b-col>
+        <div id="map">
+            <svg width="100%" height="600px">
+                <g class="buildings"></g>
+            </svg>
+        </div>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
