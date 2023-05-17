@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'http://localhost:3000/api/v1';
+const BASE_URL = 'http://kddrtserver3.isti.cnr.it:8000';
 
 const apiConnector = axios.create({
     baseURL: BASE_URL,
